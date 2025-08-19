@@ -27,9 +27,9 @@ FILE *file = NULL;
 
 static void mxl_vendor_event_handler(struct nlattr **tb)
 {
-	char ifname[100];
+	char ifname[100] = {0};
 	u32 subcmd;
-	u8 *data;
+	u8 *data = NULL;
 	size_t len;
 
 	subcmd = nla_get_u32(tb[NL80211_ATTR_VENDOR_SUBCMD]);
@@ -48,11 +48,16 @@ static void mxl_vendor_event_handler(struct nlattr **tb)
 				if (strcmp(ifname, g_ifname) == 0) {
 					struct mxl_rx_measure_report *report = (struct mxl_rx_measure_report *)data;
 
+					if(report == NULL) {
+						printf("rx_measure_handler: report has no data\n");
+						return;
+					}
+
 					if (file == NULL) {
 						file = fopen(fileName, "w");
 						if (file == NULL) {
 							printf("rx_measure_handler: Error opening file: %d %s\n", errno, strerror(errno));
-							return 1;
+							return;
 						}
 
 						// Write the headers if the file is empty

@@ -475,6 +475,9 @@ enum ltq_nl80211_vendor_events {
 #define INTEL_MAX_PROTECTED_DEAUTH_FRAME_LEN  44
 #define INTEL_NON_PROTECTED_DEAUTH_FRAME_LEN  26
 
+#define NASTA_STATS_REQ_ASYNC                 0
+#define NASTA_STATS_REQ_SYNC                  1
+
 enum {
   CSA_DEAUTH_MODE_DISABLED = 0,
   CSA_DEAUTH_MODE_UNICAST,
@@ -509,6 +512,7 @@ struct intel_vendor_unconnected_sta_req_cfg {
   u32 center_freq1;
   u32 center_freq2;
   DEF_IEEE_ADDR(addr);
+  u8  req_type;
 } __attribute__ ((packed));
 
 struct intel_vendor_sta_info { /* corresponds to vendor_sta_info in Driver */
