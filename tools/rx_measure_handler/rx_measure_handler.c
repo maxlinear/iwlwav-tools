@@ -27,7 +27,7 @@ FILE *file = NULL;
 
 static void mxl_vendor_event_handler(struct nlattr **tb)
 {
-	char ifname[100] = {0};
+	char ifname[100];
 	u32 subcmd;
 	u8 *data = NULL;
 	size_t len;
@@ -36,6 +36,7 @@ static void mxl_vendor_event_handler(struct nlattr **tb)
 	if (tb[NL80211_ATTR_VENDOR_DATA]) {
 		data = nla_data(tb[NL80211_ATTR_VENDOR_DATA]);
 		len = nla_len(tb[NL80211_ATTR_VENDOR_DATA]);
+		(void)len; // mark it as unused
 	}
 
 	if (tb[NL80211_ATTR_IFINDEX]) {
@@ -47,11 +48,6 @@ static void mxl_vendor_event_handler(struct nlattr **tb)
 			{
 				if (strcmp(ifname, g_ifname) == 0) {
 					struct mxl_rx_measure_report *report = (struct mxl_rx_measure_report *)data;
-
-					if(report == NULL) {
-						printf("rx_measure_handler: report has no data\n");
-						return;
-					}
 
 					if (file == NULL) {
 						file = fopen(fileName, "w");
@@ -89,7 +85,7 @@ static void mxl_vendor_event_handler(struct nlattr **tb)
 	}
 }
 
-void sigint_handler(void)
+void sigint_handler(int)
 {
 	if (file) {
 		fclose(file);

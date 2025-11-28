@@ -48,7 +48,7 @@ typedef int8_t s8;
 struct nl80211_state {
 	struct nl_sock *nl_sock;
 	int nl80211_id;
-	void (*event_handler)(struct nlattr **)
+	void (*event_handler)(struct nlattr **);
 };
 
 int nl80211_init(struct nl80211_state *state);

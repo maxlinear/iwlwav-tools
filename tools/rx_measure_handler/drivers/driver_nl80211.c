@@ -142,6 +142,7 @@ static void parse_vendor_event(struct nlattr **attrs, void *arg)
 
 	vendor_id = nla_get_u32(attrs[NL80211_ATTR_VENDOR_ID]);
 	subcmd = nla_get_u32(attrs[NL80211_ATTR_VENDOR_SUBCMD]);
+	(void)subcmd; // marking it as unused
 
 	switch (vendor_id) {
 		case OUI_LTQ:
@@ -156,13 +157,7 @@ static void parse_vendor_event(struct nlattr **attrs, void *arg)
 static int event_handler(struct nl_msg *msg, void *arg)
 {
 	struct genlmsghdr *gnlh = nlmsg_data(nlmsg_hdr(msg));
-	struct nlattr *tb[NL80211_ATTR_MAX + 1], *nst;
-	char ifname[100];
-	char macbuf[6*3];
-	u8 reg_type;
-	u32 wiphy_idx = 0;
-	int rem_nst;
-	u16 status;
+	struct nlattr *tb[NL80211_ATTR_MAX + 1];
 
 	nla_parse(tb, NL80211_ATTR_MAX, genlmsg_attrdata(gnlh, 0),
 			genlmsg_attrlen(gnlh, 0), NULL);
