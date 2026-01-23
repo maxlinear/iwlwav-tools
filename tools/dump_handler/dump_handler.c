@@ -182,8 +182,12 @@ static char * get_safe_path(const char * path){
   char *verified_path = NULL;
 
   if (NULL == strstr (path, "../") && NULL == strstr(path, "%00")){
-    /* Extra buffer required in order to avoid ckockwork errors */
+    /* Extra buffer required in order to avoid klocwork errors */
     verified_path = malloc(MAX_FILE_NAME_SIZE);
+    if (!verified_path) {
+        ELOG_V("Out of memory");
+        return NULL;
+    }
     mtlk_osal_strlcpy(verified_path, path, MAX_FILE_NAME_SIZE);
     return verified_path;
   }
@@ -1236,7 +1240,7 @@ main(int argc, char *argv[])
   sprintf_res = sprintf_s(sys_cmd, sizeof(sys_cmd), "line=`/bin/cat /proc/net/mtlk/topology | "
                            "/bin/grep -Fn [hw%d |"
                            "/usr/bin/awk -F ':' '{ print $1 }'`;"
-                           "[ \"X$line\" != \"X\" ] && /usr/bin/tail +$line /proc/net/mtlk/topology |"
+                           "[ \"X$line\" != \"X\" ] && /usr/bin/tail -n +$line /proc/net/mtlk/topology |"
                            "/bin/grep -om1 \"wlan[0-9]\"", card_idx);
 
   if (sprintf_res <= 0 || sprintf_res >= sizeof(sys_cmd)){
