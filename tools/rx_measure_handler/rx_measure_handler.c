@@ -27,7 +27,7 @@ FILE *file = NULL;
 
 static void mxl_vendor_event_handler(struct nlattr **tb)
 {
-	char ifname[100];
+	char ifname[100] = {0};
 	u32 subcmd;
 	u8 *data = NULL;
 	size_t len;
@@ -46,7 +46,7 @@ static void mxl_vendor_event_handler(struct nlattr **tb)
 	switch (subcmd) {
 		case LTQ_NL80211_VENDOR_EVENT_RX_MEASURE:
 			{
-				if (strcmp(ifname, g_ifname) == 0) {
+				if (data && strcmp(ifname, g_ifname) == 0) {
 					struct mxl_rx_measure_report *report = (struct mxl_rx_measure_report *)data;
 
 					if (file == NULL) {
