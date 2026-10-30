@@ -457,6 +457,8 @@ enum ltq_nl80211_vendor_events {
   LTQ_NL80211_VENDOR_EVENT_DYNAMIC_WMM_UPDATE  = 17,
   LTQ_NL80211_VENDOR_EVENT_REGDB_INFO_UPDATE   = 18,
   LTQ_NL80211_VENDOR_EVENT_RX_MEASURE          = 19,
+  LTQ_NL80211_VENDOR_EVENT_NEW_MLD_VAP         = 20,
+  LTQ_NL80211_VENDOR_EVENT_DEL_MLD_VAP         = 21,
 };
 
 
@@ -1072,5 +1074,14 @@ struct mxl_rx_measure_report {
   u32 snr[4];
   u32 captures_rem;
   u8 evm[4];
+} __attribute__ ((packed));
+
+struct mxl_new_mld_vap {
+  u8 mld_addr[ETH_ALEN];
+  u8 num_of_links;
+} __attribute__ ((packed));
+
+struct mxl_del_mld_vap {
+  u8 mld_addr[ETH_ALEN];
 } __attribute__ ((packed));
 #endif /* _VENDOR_CMDS_H_ */
